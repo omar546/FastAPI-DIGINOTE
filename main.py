@@ -8,6 +8,7 @@ app = FastAPI()
 
 model = load_model('model.h5')
 
+
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
     try:
@@ -17,7 +18,7 @@ async def upload_image(file: UploadFile):
             temp_image.seek(0)
 
             # Process the image and get the text
-            text = model.predict(Image.open(temp_image))
+            text = "back from api"
 
             # Return the text as a response
             return JSONResponse(content={"text": text})
