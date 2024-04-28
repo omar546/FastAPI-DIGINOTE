@@ -40,7 +40,7 @@ async def upload_image(file: UploadFile):
 
 
              # Return the text as a response
-            return JSONResponse(content={"text": res[0]})
+            return JSONResponse(content={"text": res})
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
