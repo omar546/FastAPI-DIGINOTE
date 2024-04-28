@@ -2,13 +2,11 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 import tempfile
 from PIL import Image
+from tensorflow.keras.models import load_model
 
 app = FastAPI()
 
-# Placeholder for image-to-text function
-def image_to_text(image):
-    # Replace this with your actual image-to-text logic (e.g., using OCR)
-    return "This is a placeholder for text extracted from an image."
+#load_model('/model.h5')
 
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
