@@ -10,15 +10,15 @@ model = load_model('model.h5')
 
 
 @app.post("/upload/")
-async def upload_image(file: UploadFile):
+async def upload_image(str: UploadFile):
     try:
         # Save the uploaded image to a temporary file
-        with tempfile.NamedTemporaryFile(delete=True, suffix=".jpg") as temp_image:
-            temp_image.write(file.file.read())
-            temp_image.seek(0)
+        # with tempfile.NamedTemporaryFile(delete=True, suffix=".jpg") as temp_image:
+        #     temp_image.write(file.file.read())
+        #     temp_image.seek(0)
 
             # Process the image and get the text
-            text = "back from api"
+            text = UploadFile + "back from API"
 
             # Return the text as a response
             return JSONResponse(content={"text": text})
