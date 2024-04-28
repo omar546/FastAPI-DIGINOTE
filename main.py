@@ -52,7 +52,7 @@ async def test():
     return JSONResponse(content={"text": "test back form api"})
 
 @app.post("/upload/")
-async def upload_image(str: UploadFile):
+async def upload_image(file: UploadFile):
     try:
         with tempfile.NamedTemporaryFile(delete=True, suffix=".jpg") as temp_image:
             temp_image.write(file.file.read())
