@@ -34,7 +34,7 @@ async def upload_image(file: UploadFile):
             img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
             image = preprocess_image(img,128,32)
             res = model.predict(np.expand_dims(image, axis=0))
-            print(res)
+            res = res.tolist()
 
              # Return the text as a response
             return JSONResponse(content={"text": res[0]})
