@@ -1,3 +1,4 @@
+import json
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 import tempfile
@@ -35,6 +36,8 @@ async def upload_image(file: UploadFile):
             image = preprocess_image(img,128,32)
             res = model.predict(np.expand_dims(image, axis=0))
             res = res.tolist()
+            res = json.dumps(res)
+
 
              # Return the text as a response
             return JSONResponse(content={"text": res[0]})
