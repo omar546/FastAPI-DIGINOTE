@@ -6,7 +6,7 @@ from tensorflow.keras.models import load_model
 
 app = FastAPI()
 
-#load_model('/model.h5')
+model = load_model('model.h5')
 
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
@@ -17,7 +17,7 @@ async def upload_image(file: UploadFile):
             temp_image.seek(0)
 
             # Process the image and get the text
-            text = image_to_text(Image.open(temp_image))
+            text = model.predict(Image.open(temp_image))
 
             # Return the text as a response
             return JSONResponse(content={"text": text})
