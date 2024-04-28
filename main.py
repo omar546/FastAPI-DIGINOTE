@@ -24,7 +24,7 @@ def preprocess_image(image, width, height):
 
 @app.get("/test/")
 async def test():
-    return JSONResponse(content={"text": "test back form api"})
+    return JSONResponse(content={"text": "api online"})
 
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
