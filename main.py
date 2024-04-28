@@ -10,8 +10,7 @@ app = FastAPI()
 
 @app.get("/test/")
 async def test():
-    text2 = "test back form api"
-    return JSONResponse(content={"text": text})
+    return JSONResponse(content={"text": "test back form api"})
 
 # @app.post("/upload/")
 # async def upload_image(str: UploadFile):
