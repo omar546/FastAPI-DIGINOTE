@@ -1,7 +1,7 @@
 fastapi==0.100.0
 hypercorn==0.14.4
 python-multipart==0.0.5
-Pillow==8.3.2
+Pillow
 tensorflow == 2.15.0
 mltu==1.2.4
 numpy
