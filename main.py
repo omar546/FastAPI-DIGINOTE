@@ -33,10 +33,11 @@ async def upload_image(file: UploadFile):
             nparr = np.frombuffer(contents, np.uint8)
             img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
             image = preprocess_image(img,128,32)
-            model.predict(np.expand_dims(image, axis=0))
+            res = model.predict(np.expand_dims(image, axis=0))
+            print(res)
 
              # Return the text as a response
-            return JSONResponse(content={"text": "this is the response"})
+            return JSONResponse(content={"text": res[0]})
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
