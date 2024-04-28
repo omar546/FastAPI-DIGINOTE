@@ -2,11 +2,11 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 import tempfile
 from PIL import Image
-from tensorflow.keras.models import load_model
+# from tensorflow.keras.models import load_model
 
 app = FastAPI()
 
-model = load_model('model.h5')
+# model = load_model('model.h5')
 
 
 @app.post("/upload/")
