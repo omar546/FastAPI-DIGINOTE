@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 import tempfile
 from PIL import Image
 from tensorflow.keras.models import load_model
+from mltu.tensorflow.losses import CTCloss
+
 import numpy as np
 
 import cv2
@@ -10,8 +12,7 @@ import cv2
 
 app = FastAPI()
 
-model = load_model('model.h5')
-
+model = load_model('model.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
 
 def preprocess_image(image, width, height):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
