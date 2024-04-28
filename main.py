@@ -8,6 +8,10 @@ app = FastAPI()
 
 # model = load_model('model.h5')
 
+@app.get("/test/")
+async def upload_image(str: UploadFile):
+    text = "test back form api"
+    return JSONResponse(content={"text": text})
 
 @app.post("/upload/")
 async def upload_image(str: UploadFile):
