@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 from tensorflow.keras.models import load_model
 from mltu.tensorflow.losses import CTCloss
+import itertools  # Import itertools module
 
 app = FastAPI()
 
