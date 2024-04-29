@@ -29,7 +29,7 @@ def preprocess_image(image, width, height):
     # Further preprocessing if needed
     return image
 
-alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+alphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
 
 @app.get("/test/")
 async def test():
