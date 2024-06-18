@@ -1,0 +1,15 @@
+setuptools
+fastapi==0.100.0
+hypercorn==0.14.4
+python-multipart==0.0.5
+Pillow
+tensorflow == 2.15.0
+numpy
+ultralytics==8.2.35
+ultralytics_thop==2.0.0
+dill==0.3.8
+stow==1.4.1
+tqdm
+utils==1.0.2
+mltu==1.2.5
+tf2onnx==1.16.1
