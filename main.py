@@ -141,8 +141,36 @@ async def upload_image(file: UploadFile):
                     figure_path = os.path.join(save_dir, f'figure_{x1}_{y1}_{x2}_{y2}.jpg')
                     cv2.imwrite(figure_path, cropped_img)
                     html_content.append(f'<img src="{figure_path}" alt="Figure"/>')
+                    else:
+            # text_image=process_image(cropped_img)
+            img_gray = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2GRAY)
+            ret, thresh2 = cv2.threshold(img_gray, 150, 255, cv2.THRESH_BINARY_INV)
+            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (150,2))
+            mask = cv2.morphologyEx(thresh2, cv2.MORPH_DILATE, kernel)
+            bboxes = []
+            bboxes_img = cropped_img.copy()
+            contours = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            contours = contours[0] if len(contours) == 2 else contours[1]
+            for cntr in contours:
+                x,y,w,h = cv2.boundingRect(cntr)
+                cv2.rectangle(bboxes_img, (x, y), (x+w, y+h), (0,0,255), 1)
+                bboxes.append((x,y,w,h))
 
-                # Add more elif conditions for other classes if needed
+            # cv2_imshow(bboxes_img)
+            # # print(bboxes)
+            for bbox in reversed(bboxes):
+                x, y, w, h = bbox
+                roi = cropped_img[y:y+h, x:x+w]  # Extract region of interest (ROI)
+
+                cv2_imshow(roi)
+                image = cv2.resize(roi, (1408, 96))
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                image = np.expand_dims(image, axis=0)
+                prediction_text = model.predict(image)[0]
+                prediction_text = np.array([prediction_text])
+                text = ctc_decoder(prediction_text,configs.vocab)
+                html_content.append(f'<p>{text}</p>')
+
 
         # Combine the HTML content into a single string
         html_output = '\n'.join(html_content)
