@@ -174,8 +174,47 @@ async def upload_image(file: UploadFile):
 
         # Combine the HTML content into a single string
         html_output = '\n'.join(html_content)
+        import json
+        from bs4 import BeautifulSoup
 
-        return JSONResponse(content={"text": html_output})
+        def convert_html_to_json(html_string):
+            soup = BeautifulSoup(html_string, 'lxml')
+            json_list = []
+
+            def handle_text_node(text, attributes=None):
+                node = {'insert': text}
+                if attributes:
+                    node['attributes'] = attributes
+                json_list.append(node)
+
+            for element in soup.body.children:
+                if element.name == 'h1':
+                    handle_text_node(
+                        element.get_text(strip=True),
+                        attributes={'bold': True, 'size': 'huge'}
+                    )
+                    json_list.append({'insert': '\n', 'attributes': {'align': 'center'}})
+                elif element.name == 'u':
+                    handle_text_node(
+                        element.get_text(strip=True),
+                        attributes={'size': 'large', 'bold': True}
+                    )
+                elif element.name == 'p':
+                    handle_text_node(element.get_text(strip=True))
+                    json_list.append({'insert': '\n'})
+                elif element.name == 'img':
+                    src = element.get('src')
+                    if src:
+                        image_url = f'http://3.75.171.189{src}'
+                        json_list.append({'insert': {'image': image_url}})
+                        json_list.append({'insert': '\n'})
+
+            return json.dumps(json_list, ensure_ascii=False)
+
+
+        json_string = convert_html_to_json(html_output)
+
+        return JSONResponse(content={"text": json_string})
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
