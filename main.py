@@ -40,6 +40,12 @@ from mltu.utils.text_utils import ctc_decoder, get_cer, get_wer
 
 
 app = FastAPI()
+checkpoint_path = 'best.pt'
+# Load the fine-tuned model
+model = YOLO(checkpoint_path)
+# Initialize TrOCR model and processor
+configs = BaseModelConfigs.load("configs.yaml")
+model = load_model('model.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
 
 def preprocess_image(image):
     # image=cv2.imread(image)
@@ -109,10 +115,7 @@ def process_image(image):
 
     return result
 
-checkpoint_path = 'best.pt'
 
-# Load the fine-tuned model
-model = YOLO(checkpoint_path)
 
 
 @app.get("/test/")
@@ -132,9 +135,7 @@ async def upload_image(file: UploadFile):
         results = model(img)
         save_dir = '/saved_yolo'
 
-        # Initialize TrOCR model and processor
-        configs = BaseModelConfigs.load("configs.yaml")
-        model = load_model('model.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
+        
 
         # Create a directory to save the detected images if it doesn't exist
         os.makedirs(save_dir, exist_ok=True)
