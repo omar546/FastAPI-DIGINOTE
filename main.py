@@ -166,7 +166,7 @@ async def upload_image(file: UploadFile):
                         image = cv2.resize(roi, (1408, 96))
                         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                         image = np.expand_dims(image, axis=0)
-                        prediction_text = model.predict(image)[0]
+                        prediction_text = ocr_model.predict(image)[0]
                         prediction_text = np.array([prediction_text])
                         text = ctc_decoder(prediction_text,configs.vocab)
                         html_content.append(f'<p>{text}</p>')
