@@ -29,7 +29,7 @@ from mltu.tensorflow.metrics import CWERMetric
 
 import cv2
 import numpy as np
-from google.colab.patches import cv2_imshow
+import cv2_imshow
 from skimage.filters import threshold_otsu
 from ultralytics import YOLO
 import dill
