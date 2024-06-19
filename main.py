@@ -14,7 +14,7 @@ from mltu.tensorflow.losses import CTCloss
 app = FastAPI()
 
 # Load the fine-tuned YOLO model
-checkpoint_path = 'best.pt'
+checkpoint_path = 'best.onnx'
 yolo_model = YOLO(checkpoint_path)
 
 # Load the OCR model
@@ -105,7 +105,7 @@ async def upload_image(file: UploadFile):
         # Process the image using YOLO model
         results = yolo_model(img)
         
-        save_dir = './saved_yolo'
+        save_dir = '/var/www/html/saved_yolo'
         os.makedirs(save_dir, exist_ok=True)
 
         # Initialize a list to hold the HTML content
