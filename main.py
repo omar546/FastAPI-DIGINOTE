@@ -105,7 +105,7 @@ async def upload_image(file: UploadFile):
         # Process the image using YOLO model
         results = yolo_model(img)
         
-        save_dir = '/saved_yolo'
+        save_dir = './saved_yolo'
         os.makedirs(save_dir, exist_ok=True)
 
         # Initialize a list to hold the HTML content
