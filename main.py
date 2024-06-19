@@ -19,7 +19,7 @@ yolo_model = YOLO(checkpoint_path)
 
 # Load the OCR model
 configs = BaseModelConfigs.load("configs.yaml")
-ocr_model = load_model('model.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
+ocr_model = load_model('model1.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
 
 def preprocess_image(image):
     # Apply Gaussian blur to reduce noise
