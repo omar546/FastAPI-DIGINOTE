@@ -122,7 +122,11 @@ async def test():
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
     try:
-        img = await cv2.imread(UploadFile)
+        # Read the image file uploaded
+        contents = await file.read()
+        nparr = np.fromstring(contents, np.uint8)
+        # Convert numpy array to image
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         
         # Test the model on an image (assuming 'model' and 'img' are defined)
         results = model(img)
