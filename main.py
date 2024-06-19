@@ -224,3 +224,60 @@ async def upload_image(file: UploadFile):
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+import tempfile
+from fpdf import FPDF 
+
+class DeltaFormat(BaseModel):
+    text: str  # JSON delta format string
+
+@app.post("/generate-pdf/")
+async def generate_pdf(delta: DeltaFormat):
+    try:
+        json_delta = delta.text  # Extract JSON delta format string from request body
+
+        # Process JSON delta to generate PDF
+        pdf_content = generate_pdf_from_json(json_delta)
+
+        if pdf_content:
+            # Return the PDF as a downloadable file response with Content-Disposition set to attachment
+            return Response(content=pdf_content, media_type='application/pdf', headers={
+                'Content-Disposition': 'attachment; filename="generated_pdf.pdf"'
+            })
+        else:
+            raise HTTPException(status_code=500, detail="Failed to generate PDF.")
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+def generate_pdf_from_json(json_delta: str):
+    try:
+        # Convert JSON delta to Python object
+        delta_data = json.loads(json_delta)
+
+        # Create a PDF document
+        pdf = FPDF()
+        pdf.add_page()
+
+        # Process the JSON delta and add content to the PDF
+        for item in delta_data:
+            if 'insert' in item:
+                if isinstance(item['insert'], str):
+                    pdf.set_font("Arial", size=12)
+                    pdf.multi_cell(0, 10, txt=item['insert'], border=0, align='L')
+
+                elif isinstance(item['insert'], dict) and 'image' in item['insert']:
+                    # Assuming item['insert']['image'] is the URL to the image or base64 encoded image
+                    # You would handle adding images to PDF based on your specific requirements
+                    pass
+
+        # Save the PDF to a temporary file
+        with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+            pdf_output_path = tmp_file.name
+            pdf.output(pdf_output_path)
+
+        return pdf_output_path  # Return the temporary file path
+
+    except Exception as e:
+        print(f"Error generating PDF: {e}")
+        return None
