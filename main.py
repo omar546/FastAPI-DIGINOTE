@@ -226,7 +226,8 @@ async def upload_image(file: UploadFile):
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
 import tempfile
-from fpdf import FPDF 
+from fpdf import FPDF
+from pydantic import BaseModel
 
 class DeltaFormat(BaseModel):
     text: str  # JSON delta format string
