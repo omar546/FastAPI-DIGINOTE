@@ -14,7 +14,7 @@ from mltu.tensorflow.losses import CTCloss
 app = FastAPI()
 
 # Load the fine-tuned YOLO model
-checkpoint_path = 'best.onnx'
+checkpoint_path = 'best.pt'
 yolo_model = YOLO(checkpoint_path)
 
 # Load the OCR model
