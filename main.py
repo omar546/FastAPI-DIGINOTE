@@ -109,7 +109,7 @@ def process_image(image):
 
     return result
 
-checkpoint_path = '/FastAPI-DIGINOTE/best.pt'
+checkpoint_path = 'best.pt'
 
 # Load the fine-tuned model
 model = YOLO(checkpoint_path)
@@ -129,8 +129,8 @@ async def upload_image(file: UploadFile):
         save_dir = '/saved_yolo'
 
         # Initialize TrOCR model and processor
-        configs = BaseModelConfigs.load("/FastAPI-DIGINOTE/configs.yaml")
-        model = load_model('/FastAPI-DIGINOTE/model.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
+        configs = BaseModelConfigs.load("configs.yaml")
+        model = load_model('model.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
 
         # Create a directory to save the detected images if it doesn't exist
         os.makedirs(save_dir, exist_ok=True)
