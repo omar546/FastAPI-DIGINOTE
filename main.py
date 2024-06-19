@@ -185,6 +185,7 @@ async def upload_image(file: UploadFile):
             json_list = []
 
             def handle_text_node(text, attributes=None):
+                text = text.strip("[]' ")
                 node = {'insert': escape_text(text)}
                 if attributes:
                     node['attributes'] = attributes
