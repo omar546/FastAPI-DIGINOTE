@@ -224,7 +224,7 @@ async def upload_image(file: UploadFile):
         encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
         memory[encoded_jwt] = [json_string,figure_path]  
 
-        return JSONResponse(content={"token": encoded_jwt})
+        return JSONResponse(content={"text": encoded_jwt})
     
 @app.get("/getText/")
 async def get_text(token: str):
