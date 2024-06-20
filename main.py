@@ -94,8 +94,6 @@ def extract_ocr_text(image):
 def get_image_url(src):
     if "figure_249_461_636_806.jpg" in src:
         return 'https://i.imgur.com/ZqWcmaj.jpeg'
-    elif "figure_125_754_794_1018.jpg" in src:
-        return 'https://i.imgur.com/szTRKIF.jpeg'
     else:
         return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf9W-4C8o3gRqwN270j6o_BoQCDeOLUOtyWZ0PisH2l2Z_Z6YDyoHUjzhYft5bkdkEirg&usqp=CAU'
 
