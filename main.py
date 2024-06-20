@@ -117,7 +117,7 @@ async def upload_image(file: UploadFile):
         # Process the image using YOLO model
         results = yolo_model(img)
         
-        save_dir = '~/saved_yolo'
+        save_dir = './saved_yolo'
         os.makedirs(save_dir, exist_ok=True)
 
         # Initialize a list to hold the HTML content
@@ -224,7 +224,7 @@ async def upload_image(file: UploadFile):
                     src = element.get('src')
                     if src:
                         
-                        image_url = f'http://3.75.171.189:8080/{src}'
+                        image_url = f'http://3.75.171.189/photos/{figure_path.split('/')[-1]}'
                         json_list.append({'insert': {'image': image_url}})
                         json_list.append({'insert': '\n'})
 
