@@ -239,13 +239,13 @@ async def upload_image(file: UploadFile):
 #     except Exception as e:
 #         return JSONResponse(content={"error": str(e)}, status_code=400)
 
-# @app.get("/getImg/")
-# async def get_img(token: str):
-#     try:
-#         img = memory[token][1]
-#         return FileResponse(path=img,filename=img.split('/')[-1],media_type='image/jpeg')
-#     except Exception as e:
-#         return JSONResponse(content={"error": str(e)}, status_code=400)
+@app.get("/getImg/")
+async def get_img(token: str):
+    try:
+        img = memory[token][1]
+        return FileResponse(path=img,filename=img.split('/')[-1],media_type='image/jpeg')
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
 
 # import tempfile
 # from fpdf import FPDF
