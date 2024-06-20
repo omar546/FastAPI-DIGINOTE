@@ -218,7 +218,6 @@ async def upload_image(file: UploadFile):
                     if src:
                         image_url = f'https://i.imgur.com/ZqWcmaj.jpeg'
                         json_list.append({'insert': {'image': image_url}})
-                        figurslist.append(image_url)
                         json_list.append({'insert': '\n'})
 
             return json.dumps(json_list, ensure_ascii=False)
@@ -226,8 +225,8 @@ async def upload_image(file: UploadFile):
 
         json_string = convert_html_to_json(html_output)
 
-        # encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
-        # memory[encoded_jwt] = [json_string,figurslist]  
+        encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
+        memory[encoded_jwt] = [json_string,figure_path]  
 
         return JSONResponse(content={"text": json_string})
     
