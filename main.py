@@ -12,6 +12,8 @@ from mltu.configs import BaseModelConfigs
 from mltu.tensorflow.losses import CTCloss
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="saved_yolo"), name="static")
+
 memory = {}
 # Load the fine-tuned YOLO model
 checkpoint_path = 'best.pt'
@@ -94,6 +96,7 @@ async def test():
 
 from fastapi.responses import FileResponse
 import jwt
+figurslist=[]
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
         # Read the image file uploaded
@@ -212,8 +215,9 @@ async def upload_image(file: UploadFile):
                 elif element.name == 'img':
                     src = element.get('src')
                     if src:
-                        image_url = f'{src}'
+                        image_url = f'{'http://3.75.171.189/'+src}'
                         json_list.append({'insert': {'image': image_url}})
+                        figurslist.append(image_url)
                         json_list.append({'insert': '\n'})
 
             return json.dumps(json_list, ensure_ascii=False)
@@ -221,8 +225,8 @@ async def upload_image(file: UploadFile):
 
         json_string = convert_html_to_json(html_output)
 
-        encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
-        # memory[encoded_jwt] = [json_string,figure_path]  
+        # encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
+        # memory[encoded_jwt] = [json_string,figurslist]  
 
         return JSONResponse(content={"text": json_string})
     
