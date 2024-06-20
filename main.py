@@ -13,7 +13,7 @@ from mltu.configs import BaseModelConfigs
 from mltu.tensorflow.losses import CTCloss
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="saved_yolo"), name="static")
+# app.mount("/static", StaticFiles(directory="saved_yolo"), name="static")
 
 memory = {}
 # Load the fine-tuned YOLO model
@@ -91,11 +91,11 @@ def extract_ocr_text(image):
 
     return text
 
-def get_image_url(src):
-    if "figure_249_461_636_806.jpg" or "figure_249_461_637_806.jpg" or " 806.jpg" in src:
-        return 'https://i.imgur.com/ZqWcmaj.jpeg'
-    else:
-        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf9W-4C8o3gRqwN270j6o_BoQCDeOLUOtyWZ0PisH2l2Z_Z6YDyoHUjzhYft5bkdkEirg&usqp=CAU'
+# def get_image_url(src):
+#     if "figure_249_461_636_806.jpg" or "figure_249_461_637_806.jpg" or " 806.jpg" in src:
+#         return 'https://i.imgur.com/ZqWcmaj.jpeg'
+#     else:
+#         return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf9W-4C8o3gRqwN270j6o_BoQCDeOLUOtyWZ0PisH2l2Z_Z6YDyoHUjzhYft5bkdkEirg&usqp=CAU'
 
 
 @app.get("/test/")
@@ -190,7 +190,7 @@ async def upload_image(file: UploadFile):
         from bs4 import BeautifulSoup
 
         def escape_text(text):
-            return text.replace("'", "''").replace('"', '""').replace('\n', '\\n')
+            return text.replace("'", "''").replace('"', '""').replace('\n', '\\n').replace('\\', '\\\\')
 
         def convert_html_to_json(html_string):
             soup = BeautifulSoup(html_string, 'lxml')
@@ -224,7 +224,7 @@ async def upload_image(file: UploadFile):
                     src = element.get('src')
                     if src:
                         
-                        image_url = get_image_url(src)
+                        image_url = f'http://3.75.171.189:8080/{src}'
                         json_list.append({'insert': {'image': image_url}})
                         json_list.append({'insert': '\n'})
 
