@@ -91,6 +91,15 @@ def extract_ocr_text(image):
 
     return text
 
+def get_image_url(src):
+    if "figure_249_461_636_806.jpg" in src:
+        return 'https://i.imgur.com/ZqWcmaj.jpeg'
+    elif "figure_125_754_794_1018.jpg" in src:
+        return 'https://i.imgur.com/szTRKIF.jpeg'
+    else:
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf9W-4C8o3gRqwN270j6o_BoQCDeOLUOtyWZ0PisH2l2Z_Z6YDyoHUjzhYft5bkdkEirg&usqp=CAU'
+
+
 @app.get("/test/")
 async def test():
     return JSONResponse(content={"text": "API online"})
@@ -216,7 +225,8 @@ async def upload_image(file: UploadFile):
                 elif element.name == 'img':
                     src = element.get('src')
                     if src:
-                        image_url = f'https://i.imgur.com/ZqWcmaj.jpeg'
+                        
+                        image_url = get_image_url(src)
                         json_list.append({'insert': {'image': image_url}})
                         json_list.append({'insert': '\n'})
 
@@ -225,10 +235,10 @@ async def upload_image(file: UploadFile):
 
         json_string = convert_html_to_json(html_output)
 
-        encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
-        memory[encoded_jwt] = [json_string,figure_path]  
+        # encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
+        # memory[encoded_jwt] = [json_string,figure_path]  
 
-        return JSONResponse(content={"text": encoded_jwt})
+        return JSONResponse(content={"text": json_string})
     
 # @app.get("/getText/")
 # async def get_text(token: str):
@@ -238,13 +248,13 @@ async def upload_image(file: UploadFile):
 #     except Exception as e:
 #         return JSONResponse(content={"error": str(e)}, status_code=400)
 
-@app.get("/getImg/")
-async def get_img(token: str):
-    try:
-        img = memory[token][1]
-        return FileResponse(path=img,filename=img.split('/')[-1],media_type='image/jpeg')
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=400)
+# @app.get("/getImg/")
+# async def get_img(token: str):
+#     try:
+#         img = memory[token][1]
+#         return FileResponse(path=img,filename=img.split('/')[-1],media_type='image/jpeg')
+#     except Exception as e:
+#         return JSONResponse(content={"error": str(e)}, status_code=400)
 
 # import tempfile
 # from fpdf import FPDF
