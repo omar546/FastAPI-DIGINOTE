@@ -12,7 +12,7 @@ from mltu.configs import BaseModelConfigs
 from mltu.tensorflow.losses import CTCloss
 
 app = FastAPI()
-
+memory = {}
 # Load the fine-tuned YOLO model
 checkpoint_path = 'best.pt'
 yolo_model = YOLO(checkpoint_path)
@@ -92,6 +92,8 @@ def extract_ocr_text(image):
 async def test():
     return JSONResponse(content={"text": "API online"})
 
+from fastapi.responses import FileResponse
+
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
     try:
@@ -105,7 +107,7 @@ async def upload_image(file: UploadFile):
         # Process the image using YOLO model
         results = yolo_model(img)
         
-        save_dir = '/var/www/html/saved_yolo'
+        save_dir = '~/saved_yolo'
         os.makedirs(save_dir, exist_ok=True)
 
         # Initialize a list to hold the HTML content
@@ -211,7 +213,7 @@ async def upload_image(file: UploadFile):
                 elif element.name == 'img':
                     src = element.get('src')
                     if src:
-                        image_url = f'http://3.75.171.189{src}'
+                        image_url = f'{src}'
                         json_list.append({'insert': {'image': image_url}})
                         json_list.append({'insert': '\n'})
 
@@ -220,11 +222,30 @@ async def upload_image(file: UploadFile):
 
         json_string = convert_html_to_json(html_output)
 
-        return JSONResponse(content={"text": json_string})
+        encoded_jwt = jwt.encode({"sub": 'abc'}, "SeCrEt", "HS256")
+        memory[encoded_jwt] = [json_string,figure_path]  
+
+        return JSONResponse(content={"token": encoded_jwt})
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
+@app.get("/getText/")
+async def get_text(token: str):
+    try:
+        text = memory[token][0]
+        return JSONResponse(content={"text": text})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
+
+@app.get("/getImg/")
+async def get_img(token: str):
+    try:
+        img = memory[token][1]
+        return FileResponse(path=img,filename=img.split('/')[-1],media_type='image/jpeg')
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
+
 import tempfile
 from fpdf import FPDF
 from pydantic import BaseModel
