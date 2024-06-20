@@ -1,5 +1,6 @@
 import json
 from fastapi import FastAPI, File, UploadFile
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 import os
 import cv2
