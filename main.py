@@ -209,12 +209,12 @@ async def upload_image(file: UploadFile):
                 elif element.name == 'p':
                     handle_text_node(element.get_text(strip=True))
                     json_list.append({'insert': '\n'})
-                elif element.name == 'img':
-                    src = element.get('src')
-                    if src:
-                        image_url = f'{src}'
-                        json_list.append({'insert': {'image': image_url}})
-                        json_list.append({'insert': '\n'})
+                # elif element.name == 'img':
+                #     src = element.get('src')
+                #     if src:
+                #         image_url = f'{src}'
+                #         json_list.append({'insert': {'image': image_url}})
+                #         json_list.append({'insert': '\n'})
 
             return json.dumps(json_list, ensure_ascii=False)
 
