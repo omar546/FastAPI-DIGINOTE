@@ -93,10 +93,9 @@ async def test():
     return JSONResponse(content={"text": "API online"})
 
 from fastapi.responses import FileResponse
-
+import jwt
 @app.post("/upload/")
 async def upload_image(file: UploadFile):
-    try:
         # Read the image file uploaded
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
@@ -226,9 +225,6 @@ async def upload_image(file: UploadFile):
         memory[encoded_jwt] = [json_string,figure_path]  
 
         return JSONResponse(content={"token": encoded_jwt})
-
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
     
 @app.get("/getText/")
 async def get_text(token: str):
