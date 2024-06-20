@@ -216,7 +216,7 @@ async def upload_image(file: UploadFile):
                 elif element.name == 'img':
                     src = element.get('src')
                     if src:
-                        image_url = f'https://imgur.com/a/CXI4D0z'
+                        image_url = f'https://i.imgur.com/ZqWcmaj.jpeg'
                         json_list.append({'insert': {'image': image_url}})
                         figurslist.append(image_url)
                         json_list.append({'insert': '\n'})
