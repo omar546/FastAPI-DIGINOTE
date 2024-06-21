@@ -209,9 +209,9 @@ async def upload_image(file: UploadFile):
                 if element.name == 'h1':
                     handle_text_node(
                         element.get_text(strip=True),
-                        attributes={'bold': True, 'size': 'huge'}
+                        attributes={'bold': True, 'size': 'huge','align': 'center'}
                     )
-                    json_list.append({'insert': '\n', 'attributes': {'align': 'center'}})
+                    json_list.append({'insert': '\n',})
                 elif element.name == 'u':
                     handle_text_node(
                         element.get_text(strip=True),
@@ -227,6 +227,7 @@ async def upload_image(file: UploadFile):
                         image_url = f'http://3.75.171.189/photos/{figure_path.split("/")[-1]}'
                         json_list.append({'insert': {'image': image_url}})
                         json_list.append({'insert': '\n'})
+                        
 
             return json.dumps(json_list, ensure_ascii=False)
 
