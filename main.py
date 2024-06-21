@@ -190,7 +190,7 @@ async def upload_image(file: UploadFile):
         from bs4 import BeautifulSoup
 
         def escape_text(text):
-            return text.replace("'", "''").replace('"', '""').replace('\n', '\\n').replace('\\', '\\\\')
+            return text.replace("'", "''").replace('"', '""').replace('\n', '\\n').replace('\\', '?')
 
         def convert_html_to_json(html_string):
             soup = BeautifulSoup(html_string, 'lxml')
