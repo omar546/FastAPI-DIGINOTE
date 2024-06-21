@@ -224,7 +224,7 @@ async def upload_image(file: UploadFile):
                     src = element.get('src')
                     if src:
                         
-                        image_url = f'http://3.75.171.189/photos/{figure_path.split('/')[-1]}'
+                        image_url = f'http://3.75.171.189/photos/{figure_path.split("/")[-1]}'
                         json_list.append({'insert': {'image': image_url}})
                         json_list.append({'insert': '\n'})
 
