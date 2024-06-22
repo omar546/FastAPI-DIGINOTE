@@ -348,7 +348,7 @@ async def upload_image(file: UploadFile):
                         image = cv2.resize(roi, (1408, 96))
                         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                         image = np.expand_dims(image, axis=0)
-                        ocr_text = extract_ocr_text(cropped_img)
+                        ocr_text = extract_ocr_text(image)
                         html_content.append(f'<p>{ocr_text}</p>')
 
 
