@@ -343,16 +343,7 @@ async def upload_image(file: UploadFile):
                     for bbox in reversed(bboxes):
                         x, y, w, h = bbox
                         roi = cropped_img[y:y+h, x:x+w]  # Extract region of interest (ROI)
-
-                        # cv2_imshow(roi)
-                        image = cv2.resize(roi, (1408, 96))
-                        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                        image = np.expand_dims(image, axis=0)
-                        prediction_text = ocr_model.predict(image)[0]
-                        prediction_text = np.array([prediction_text])
-                        text = ctc_decoder(prediction_text,configs.vocab)
-                        corrected_text = contextual_analysis_correction(text[0])
-                        corrected = correct_spelling(corrected_text)
+                        ocr_text = extract_ocr_text(roi)
                         html_content.append(f'<p>{corrected}</p>')
 
 
