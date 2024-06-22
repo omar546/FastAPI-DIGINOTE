@@ -179,7 +179,7 @@ def contextual_analysis_correction(text):
 
         i += 1
 
-        return " ".join(corrected_words)
+    return " ".join(corrected_words)
 
 from spellchecker import SpellChecker
 
