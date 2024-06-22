@@ -177,7 +177,7 @@ def contextual_analysis_correction(text):
     else:
         corrected_words.append(word)  # Keep original word if not in dictionary
 
-        i += 1
+    i += 1
 
     return " ".join(corrected_words)
 
