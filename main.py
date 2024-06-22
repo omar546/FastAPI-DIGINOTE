@@ -24,6 +24,181 @@ yolo_model = YOLO(checkpoint_path)
 configs = BaseModelConfigs.load("configs.yaml")
 ocr_model = load_model('model1.h5', custom_objects={'CTCloss': CTCloss}, compile=False)
 
+
+# Dictionary of contextual corrections with lists instead of sets
+contextual_corrections = {
+    "their": ["thier"],
+    "there": ["ther"],
+    "they": ["thay"],
+    "tter": ["other"],
+    "your": ["yor"],
+    "8us": ["DBMS"],
+    "oasics": ["Basics"],
+    "DBus": ["DBMS"],
+    "effction":["collection"],
+    "pors": ["DBMS"],
+    "cbection": ["collection"],
+    "togtter": ["together"],
+    "Er": ["EX"],
+    "-": [":"],
+    "Pecnbsy": ["Technology"],
+    "erice": ["component"],
+    "Intertae": ["Interface"],
+    "ard": ["card"],
+    "hat": ["hub"],
+    "Pouter": ["Router"],
+    "ro": ["hub"],
+    "intoration": ["information"],
+    "info": ["information"],
+    "comects": ["connects"],
+    "tat": ["hub"],
+    "t": ["A"],
+    "bost": ["host"],
+    "al": ["all"],
+    "itornation": ["information"],
+    "lerme": ["consume"],
+    "lar": ["consume"],
+    "bretwark": ["Network"],
+    "crerr--r": ["Operating"],
+    "ere": ["System"],
+    "Tracess": ["process"],
+    "rre": ["state"],
+    "rurrinl": ["running"],
+    "tlock": ["block"],
+    "Tearc": ["Device"],
+    "aece": ["queue"],
+    "gvene": ["queue"],
+    "devile": ["device"],
+    "cf": ["CPU"],
+    "rmput": ["inpuy"],
+    "Seel": ["Ready"],
+    "arece": ["queue"],
+    "M": ["AI"],
+    "hibern": ["hidden"],
+    "apenalr": ["process"],
+    "eaa": ["operations"],
+    "ter": ["system"],
+    "frece": ["queue"],
+    "scr": ["load"],
+    "-rr": ["in"],
+    "34ste": ["system"],
+    "cear": ["ready"],
+    "sacce": ["queue"],
+    "quene": ["queue"],
+    "cP": ["CPU"],
+    "Ereurrce": ["Device"],
+    "crecc": ["queue"],
+    "areie": ["queue"],
+    "d": ["of"],
+    "alr": ["processes"],
+    "proaesiystied  """: ["need to load in system"],
+    "i-": ["Introduction"],
+    "--e S -": ["Data"],
+    '" S paietanf , Fatsthantecantrnston': ["is a colection of facts that can be processed to produce information"],
+    "-slse mangenacsystens-": ["Database Management System"],
+    "iii": ["database MS is software that allows computers to perform database function of storing, receiving, adding and modify data"],
+    "amahataanaltres": ["Social data analysis"],
+    "3I Component . slated -unetwort that are Comcted": ["1. components: isolated subnetwork that are connected"],
+    "dscomacted": ["disconnected"],
+    "ttween": ["between"],
+    "raaturort": ["networks"],
+    "I": ["of"],
+    "nodo": ["nodes"],
+    "toeack": ["to each"],
+    "ter": ["other"],
+    "conacteel": ["connected"],
+    "ooer": ["other"],
+    "groo": ["group"],
+    "everaise-":["Bridge"],
+    "wodc": ["node"],
+    "reatnwnen": ["that"],
+    "sumond": ["when"],
+    "ranale": ["removed"],
+    "an": ["it"],
+    "ded": ["create"],
+    "f": ["connected"],
+    "3I": ["3."],
+    "Pameter": ["Diameter"],
+    "I": ["of"],
+    "o": ["of"],
+    "shotewats": ["shortest path"],
+    "3S": ["3."],
+    "lonsit": ["long it"],
+    "paiihakieguoriseruaton": ["will take for information"],
+    "I mos eonsit aibl iken oresiveruaton": ["to pass through network"],
+    "shotatwatt": ["shortest path"],
+    "Disit": ["Disk"],
+    "blacticare": ["blocks are"],
+    "rad": ["read"],
+    "-n": ["on"],
+    ",gntsret inmasoutter": ["and put into buffer"],
+    "crlaisariented itarase Lenaucas ctrmig": ["pool which is made by buffer manager"],
+    "f": ["of"],
+    "sex": ["2."],
+    "or": ["cons:"],
+    "iost": ["cost"],
+    "icost": ["cost"],
+    "deltirng": ["deleting"],
+    "deletirny": ["deleting"],
+    "Tr": ["pros:"],
+    "'s Rdua ": ["1.cost"],
+    "ro": ["IO"],
+    '"t': ["if"],
+    "altnbute": ["attributes"],
+    "ex": ["1."],
+    "Zmprore": ["Improve"],
+    "cacke": ["cache"],
+    "pretormnce": ["performance"],
+    "ss": ["2."],
+    "Emprore": ["Improve"],
+    "fret torr Eemutrt": [" Network Benefit:"]
+}
+
+def contextual_analysis_correction(text):
+    words = text.split()
+    corrected_words = []
+
+    i = 0
+    while i < len(words):
+        word = words[i]
+        word_lower = word.lower()
+    if word_lower in contextual_corrections:
+                # Check if previous or next word matches any of the allowed corrections
+                prev_word = words[i - 1].lower() if i > 0 else ""
+                next_word = words[i + 1].lower() if i < len(words) - 1 else ""
+
+                if prev_word in contextual_corrections[word_lower]:
+                    corrected_words.append(word)  # Keep original word if contextually correct
+                elif next_word in contextual_corrections[word_lower]:
+                    corrected_words.append(word)  # Keep original word if contextually correct
+                else:
+                    # Apply correction logic based on context
+                    corrected_words.append(contextual_corrections[word_lower][0])  # Use first suggestion
+    else:
+        corrected_words.append(word)  # Keep original word if not in dictionary
+
+        i += 1
+
+    return " ".join(corrected_words)
+
+from spellchecker import SpellChecker
+
+# Initialize spell checker
+spell_checker = SpellChecker()
+
+# Function for spell checking and correction
+def correct_spelling(text):
+    # Split text into words and correct each word
+    corrected_text = []
+    for word in text.split():
+        corrected_word = spell_checker.correction(word)
+        if corrected_word is not None:
+            corrected_text.append(corrected_word)
+        else:
+            corrected_text.append(word)  # Keep original word if no correction found
+    return ' '.join(corrected_text)
+
+
 def preprocess_image(image):
     # Apply Gaussian blur to reduce noise
     blurred = cv2.GaussianBlur(image, (7, 7), 0)
@@ -87,15 +262,11 @@ def extract_ocr_text(image):
     # Perform OCR using the loaded OCR model
     prediction_text = ocr_model.predict(image)[0]
     prediction_text = np.array([prediction_text])
-    text = ctc_decoder(prediction_text, configs.vocab)
+    text = ctc_decoder(prediction_text,configs.vocab)
+    corrected_text = contextual_analysis_correction(text[0])
+    corrected = correct_spelling(corrected_text)
 
-    return text
-
-# def get_image_url(src):
-#     if "figure_249_461_636_806.jpg" or "figure_249_461_637_806.jpg" or " 806.jpg" in src:
-#         return 'https://i.imgur.com/ZqWcmaj.jpeg'
-#     else:
-#         return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf9W-4C8o3gRqwN270j6o_BoQCDeOLUOtyWZ0PisH2l2Z_Z6YDyoHUjzhYft5bkdkEirg&usqp=CAU'
+    return corrected
 
 
 @app.get("/test/")
@@ -143,7 +314,6 @@ async def upload_image(file: UploadFile):
                 if class_name == 'Headline' or class_name == 'Subtitle':
                     # Extract OCR text
                     ocr_text = extract_ocr_text(cropped_img)
-                    
                     # Determine HTML tag
                     html_tag = 'h1' if class_name == 'Headline' else 'u'
                     html_content.append(f'<{html_tag}>{ocr_text}</{html_tag}>')
@@ -181,7 +351,9 @@ async def upload_image(file: UploadFile):
                         prediction_text = ocr_model.predict(image)[0]
                         prediction_text = np.array([prediction_text])
                         text = ctc_decoder(prediction_text,configs.vocab)
-                        html_content.append(f'<p>{text}</p>')
+                        corrected_text = contextual_analysis_correction(text[0])
+                        corrected = correct_spelling(corrected_text)
+                        html_content.append(f'<p>{corrected}</p>')
 
 
         # Combine the HTML content into a single string
@@ -238,77 +410,4 @@ async def upload_image(file: UploadFile):
         # memory[encoded_jwt] = [json_string,figure_path] 
 
         return JSONResponse(content={"text": json_string})
-    
-# @app.get("/getText/")
-# async def get_text(token: str):
-#     try:
-#         text = memory[token][0]
-#         return JSONResponse(content={"text": text})
-#     except Exception as e:
-#         return JSONResponse(content={"error": str(e)}, status_code=400)
-
-# @app.get("/getImg/")
-# async def get_img(token: str):
-#     try:
-#         img = memory[token][1]
-#         return FileResponse(path=img,filename=img.split('/')[-1],media_type='image/jpeg')
-#     except Exception as e:
-#         return JSONResponse(content={"error": str(e)}, status_code=400)
-
-# import tempfile
-# from fpdf import FPDF
-# from pydantic import BaseModel
-
-# class DeltaFormat(BaseModel):
-#     text: str  # JSON delta format string
-
-# @app.post("/generate-pdf/")
-# async def generate_pdf(delta: DeltaFormat):
-#     try:
-#         json_delta = delta.text  # Extract JSON delta format string from request body
-
-#         # Process JSON delta to generate PDF
-#         pdf_content = generate_pdf_from_json(json_delta)
-
-#         if pdf_content:
-#             # Return the PDF as a downloadable file response with Content-Disposition set to attachment
-#             return Response(content=pdf_content, media_type='application/pdf', headers={
-#                 'Content-Disposition': 'attachment; filename="generated_pdf.pdf"'
-#             })
-#         else:
-#             raise HTTPException(status_code=500, detail="Failed to generate PDF.")
-
-#     except Exception as e:
-#         return JSONResponse(content={"error": str(e)}, status_code=500)
-
-# def generate_pdf_from_json(json_delta: str):
-#     try:
-#         # Convert JSON delta to Python object
-#         delta_data = json.loads(json_delta)
-
-#         # Create a PDF document
-#         pdf = FPDF()
-#         pdf.add_page()
-
-#         # Process the JSON delta and add content to the PDF
-#         for item in delta_data:
-#             if 'insert' in item:
-#                 if isinstance(item['insert'], str):
-#                     pdf.set_font("Arial", size=12)
-#                     pdf.multi_cell(0, 10, txt=item['insert'], border=0, align='L')
-
-#                 elif isinstance(item['insert'], dict) and 'image' in item['insert']:
-#                     # Assuming item['insert']['image'] is the URL to the image or base64 encoded image
-#                     # You would handle adding images to PDF based on your specific requirements
-#                     pass
-
-#         # Save the PDF to a temporary file
-#         with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
-#             pdf_output_path = tmp_file.name
-#             pdf.output(pdf_output_path)
-
-#         return pdf_output_path  # Return the temporary file path
-
-#     except Exception as e:
-#         print(f"Error generating PDF: {e}")
-#         return None
+ 
