@@ -162,24 +162,24 @@ def contextual_analysis_correction(text):
     while i < len(words):
         word = words[i]
         word_lower = word.lower()
-    if word_lower in contextual_corrections:
-                # Check if previous or next word matches any of the allowed corrections
-                prev_word = words[i - 1].lower() if i > 0 else ""
-                next_word = words[i + 1].lower() if i < len(words) - 1 else ""
+        if word_lower in contextual_corrections:
+                    # Check if previous or next word matches any of the allowed corrections
+                    prev_word = words[i - 1].lower() if i > 0 else ""
+                    next_word = words[i + 1].lower() if i < len(words) - 1 else ""
 
-                if prev_word in contextual_corrections[word_lower]:
-                    corrected_words.append(word)  # Keep original word if contextually correct
-                elif next_word in contextual_corrections[word_lower]:
-                    corrected_words.append(word)  # Keep original word if contextually correct
-                else:
-                    # Apply correction logic based on context
-                    corrected_words.append(contextual_corrections[word_lower][0])  # Use first suggestion
-    else:
-        corrected_words.append(word)  # Keep original word if not in dictionary
+                    if prev_word in contextual_corrections[word_lower]:
+                        corrected_words.append(word)  # Keep original word if contextually correct
+                    elif next_word in contextual_corrections[word_lower]:
+                        corrected_words.append(word)  # Keep original word if contextually correct
+                    else:
+                        # Apply correction logic based on context
+                        corrected_words.append(contextual_corrections[word_lower][0])  # Use first suggestion
+        else:
+            corrected_words.append(word)  # Keep original word if not in dictionary
 
-    i += 1
+        i += 1
 
-    return " ".join(corrected_words)
+        return " ".join(corrected_words)
 
 from spellchecker import SpellChecker
 
