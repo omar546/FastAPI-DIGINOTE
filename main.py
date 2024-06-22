@@ -343,8 +343,13 @@ async def upload_image(file: UploadFile):
                     for bbox in reversed(bboxes):
                         x, y, w, h = bbox
                         roi = cropped_img[y:y+h, x:x+w]  # Extract region of interest (ROI)
-                        ocr_text = extract_ocr_text(roi)
-                        html_content.append(f'<p>{corrected}</p>')
+
+                        # cv2_imshow(roi)
+                        image = cv2.resize(roi, (1408, 96))
+                        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                        image = np.expand_dims(image, axis=0)
+                        ocr_text = extract_ocr_text(cropped_img)
+                        html_content.append(f'<p>{ocr_text}</p>')
 
 
         # Combine the HTML content into a single string
